@@ -13,10 +13,11 @@ pub fn main(init: std.process.Init) !void {
     var fba: std.heap.FixedBufferAllocator = .init(usable_server_malloc);
     const server_allocator = fba.allocator();
 
-    const address = try Io.net.IpAddress.parse("127.0.0.1", 80);
+    const address = try Io.net.IpAddress.parseIp4("127.0.0.1", 8080);
+    std.debug.print("Address parsed: {any}\n", .{address});
 
-    try server.init(address, server_allocator); // 512 MB
+    try server.init(&address, server_allocator); // 512 MB
     defer server.deinit();
 
-    server.serve();
+    try server.serve();
 }
